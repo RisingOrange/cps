@@ -1,5 +1,5 @@
 <template>
-  <div 
+  <div
     style="width:500px; height:500px; border:10px solid #000; font-size:400px; text-align:center; vertical-align:middle; line-height:500px; margin:auto;"
     @click="clickHandler($event)"
     @contextmenu="clickHandler($event)"
@@ -13,38 +13,36 @@
   </div>
 </template>
 
-
 <script>
 
-function rgbStringToValues(rgb){
-  return rgb.substring(4, rgb.length-1)
+function rgbStringToValues (rgb) {
+  return rgb.substring(4, rgb.length - 1)
     .replace(/ /g, '')
     .split(',')
     .map(x => +x)
 }
 
-function rgb(r, g, b){
+function rgb (r, g, b) {
   return `rgb(${r},${g},${b})`
 }
 
 export default {
   name: 'App',
-  data: function() { 
+  data: function () {
     return {
       isTestRunning: false,
       clickAmount: 0,
       testDurationMs: 5000,
       cpsResult: 0,
-      clickNumberColor: rgb(0, 0, 0),
+      clickNumberColor: rgb(0, 0, 0)
     }
   },
   methods: {
-    clickHandler(e){
-
+    clickHandler (e) {
       // preventing right-click contextmenu from showing up
       e.preventDefault()
 
-      if(!this.isTestRunning){
+      if (!this.isTestRunning) {
         this.isTestRunning = true
         this.clickAmount = 0
         setTimeout(() => this.evaluateTest(), this.testDurationMs)
@@ -57,18 +55,19 @@ export default {
       r += 10
       this.clickNumberColor = rgb(r, g, b)
     },
-    evaluateTest(){
+    evaluateTest () {
       this.isTestRunning = false
 
-      let clicksPerSecond = (this.clickAmount * 1000) / this.testDurationMs
+      const clicksPerSecond = (this.clickAmount * 1000) / this.testDurationMs
       this.cpsResult = clicksPerSecond
       this.clickAmount = 0
+      this.clickNumberColor = rgb(0, 0, 0)
 
       // alerting using timeout to udpate the display first
       setTimeout(() => alert(`${clicksPerSecond} CPS`), 10)
     }
 
-  },
+  }
 }
 </script>
 
