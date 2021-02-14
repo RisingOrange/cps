@@ -1,7 +1,7 @@
 <template>
   <div
-    @click="handleClick($event)"
-    @contextmenu="handleClick($event)"
+    @click="onClick($event)"
+    @contextmenu="onClick($event)"
     class="click-area noselect"
     :style="{ color: clickNumberColor }"
   >
@@ -23,6 +23,7 @@
 </template>
 
 <script>
+import Swal from 'sweetalert2'
 
 function rgb (r, g, b) {
   return `rgb(${r},${g},${b})`
@@ -31,6 +32,19 @@ function rgb (r, g, b) {
 function round (value, decimals) {
   return Number(Math.round(value + 'e' + decimals) + 'e-' + decimals)
 }
+
+function disableContextMenu () {
+  document.addEventListener(...contextMenuDisabler)
+}
+
+function enableContextMenu () {
+  document.removeEventListener(...contextMenuDisabler)
+}
+
+const contextMenuDisabler = [
+  'contextmenu',
+  (e) => { e.preventDefault() }
+]
 
 export default {
   name: 'App',
@@ -43,26 +57,37 @@ export default {
     }
   },
   methods: {
-    handleClick (e) {
+    onClick (e) {
       // preventing right-click contextmenu from showing up
       e.preventDefault()
 
       if (!this.isTestRunning) {
         this.isTestRunning = true
         this.clickAmount = 0
-        setTimeout(() => this.evaluateTest(), this.testDurationSecs * 1000)
+        setTimeout(() => this.onTestEnd(), this.testDurationSecs * 1000)
       }
       this.clickAmount += 1
     },
-    evaluateTest () {
+    onTestEnd () {
       this.isTestRunning = false
 
       const clicksPerSecond = round(this.clickAmount / this.testDurationSecs, 2)
       this.lastCpsResult = clicksPerSecond
       this.clickAmount = 0
 
+      this.showResultAlert(clicksPerSecond)
+    },
+    showResultAlert (clicksPerSecond) {
+      disableContextMenu()
+
       // alerting using timeout to udpate the display first
-      setTimeout(() => alert(`${clicksPerSecond} CPS`), 10)
+      setTimeout(() => Swal.fire({
+        text: `${clicksPerSecond} CPS`,
+        confirmButtonText: 'Ok',
+        allowOutsideClick: false,
+        willClose: enableContextMenu
+      }),
+      10)
     }
   },
   computed: {
