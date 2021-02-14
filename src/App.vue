@@ -4,7 +4,6 @@
     @contextmenu="onClick($event)"
     class="click-area noselect"
     :style="{ color: clickNumberColor }"
-    touch-action: none
   >
     {{ clickAmount }}
   </div>
@@ -95,6 +94,12 @@ export default {
     clickNumberColor () {
       return rgb(this.clickAmount * 8, 0, 0)
     }
+  },
+  setup () {
+    console.log('setup')
+    // disable zooming, because fast tapping on mobile triggers it
+    const meta = [...document.getElementsByTagName('meta')].filter(x => x.name === 'viewport')[0]
+    meta.content = 'width=device-width, user-scalable=no'
   }
 }
 </script>
