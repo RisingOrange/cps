@@ -10,6 +10,16 @@
   <div style="font-size: xx-large; padding: 20px; text-align: center">
     {{ lastCpsResult }} cps
   </div>
+  <div
+    style="text-align:center; padding:10px"
+  >{{ testDurationSecs }} second(s)
+  </div>
+  <input
+    v-if="!isTestRunning"
+    v-model="testDurationSecs"
+    type="range" min="1" max="15" step="1"
+    style="display:block; margin:auto;"
+  >
 </template>
 
 <script>
@@ -24,7 +34,7 @@ export default {
     return {
       isTestRunning: false,
       clickAmount: 0,
-      testDurationMs: 5000,
+      testDurationSecs: 8,
       lastCpsResult: 0
     }
   },
@@ -36,14 +46,14 @@ export default {
       if (!this.isTestRunning) {
         this.isTestRunning = true
         this.clickAmount = 0
-        setTimeout(() => this.evaluateTest(), this.testDurationMs)
+        setTimeout(() => this.evaluateTest(), this.testDurationSecs * 1000)
       }
       this.clickAmount += 1
     },
     evaluateTest () {
       this.isTestRunning = false
 
-      const clicksPerSecond = (this.clickAmount * 1000) / this.testDurationMs
+      const clicksPerSecond = this.clickAmount / this.testDurationSecs
       this.lastCpsResult = clicksPerSecond
       this.clickAmount = 0
 
