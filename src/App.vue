@@ -15,8 +15,8 @@
   >{{ testDurationSecs }} second(s)
   </div>
   <input
-    v-if="!isTestRunning"
     v-model="testDurationSecs"
+    v-if="!isTestRunning"
     type="range" min="1" max="15" step="1"
     style="display:block; margin:auto;"
   >
