@@ -4,7 +4,7 @@
     @contextmenu="onClick($event)"
     class="click-area noselect"
     :style="{ color: clickNumberColor }"
-    touch-action:manipulation
+    touch-action: none
   >
     {{ clickAmount }}
   </div>
