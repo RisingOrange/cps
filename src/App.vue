@@ -75,19 +75,17 @@ export default {
       this.lastCpsResult = clicksPerSecond
       this.clickAmount = 0
 
-      this.showResultAlert(clicksPerSecond)
+      // call function using timeout to let the display update first
+      setTimeout(() => this.showResultAlert(clicksPerSecond), 0)
     },
     showResultAlert (clicksPerSecond) {
-      disableContextMenu()
-
-      // alerting using timeout to udpate the display first
-      setTimeout(() => Swal.fire({
+      disableContextMenu() // disables contextmenu
+      Swal.fire({
         text: `${clicksPerSecond} CPS`,
         confirmButtonText: 'Ok',
         allowOutsideClick: false,
-        willClose: enableContextMenu
-      }),
-      10)
+        willClose: enableContextMenu // reenables contextmenu
+      })
     }
   },
   computed: {
