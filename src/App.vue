@@ -1,26 +1,18 @@
 <template>
   <div
-    style="width:500px; height:500px; border:10px solid #000; font-size:400px; text-align:center; vertical-align:middle; line-height:500px; margin:auto;"
-    @click="clickHandler($event)"
-    @contextmenu="clickHandler($event)"
-    :style="{ color : clickNumberColor }"
-    class="noselect"
+    @click="handleClick($event)"
+    @contextmenu="handleClick($event)"
+    class="click-area noselect"
+    :style="{ color: clickNumberColor }"
   >
-  {{ clickAmount }}
+    {{ clickAmount }}
   </div>
-  <div style="font-size: xx-large; padding:20px; text-align:center;"
-  >{{cpsResult}}  cps
+  <div style="font-size: xx-large; padding: 20px; text-align: center">
+    {{ lastCpsResult }} cps
   </div>
 </template>
 
 <script>
-
-function rgbStringToValues (rgb) {
-  return rgb.substring(4, rgb.length - 1)
-    .replace(/ /g, '')
-    .split(',')
-    .map(x => +x)
-}
 
 function rgb (r, g, b) {
   return `rgb(${r},${g},${b})`
@@ -33,12 +25,11 @@ export default {
       isTestRunning: false,
       clickAmount: 0,
       testDurationMs: 5000,
-      cpsResult: 0,
-      clickNumberColor: rgb(0, 0, 0)
+      lastCpsResult: 0
     }
   },
   methods: {
-    clickHandler (e) {
+    handleClick (e) {
       // preventing right-click contextmenu from showing up
       e.preventDefault()
 
@@ -48,30 +39,37 @@ export default {
         setTimeout(() => this.evaluateTest(), this.testDurationMs)
       }
       this.clickAmount += 1
-
-      // change color of number
-      console.log(this.clickNumberColor)
-      let [r, g, b] = rgbStringToValues(this.clickNumberColor)
-      r += 10
-      this.clickNumberColor = rgb(r, g, b)
     },
     evaluateTest () {
       this.isTestRunning = false
 
       const clicksPerSecond = (this.clickAmount * 1000) / this.testDurationMs
-      this.cpsResult = clicksPerSecond
+      this.lastCpsResult = clicksPerSecond
       this.clickAmount = 0
-      this.clickNumberColor = rgb(0, 0, 0)
 
       // alerting using timeout to udpate the display first
       setTimeout(() => alert(`${clicksPerSecond} CPS`), 10)
     }
-
+  },
+  computed: {
+    clickNumberColor () {
+      return rgb(this.clickAmount * 8, 0, 0)
+    }
   }
 }
 </script>
 
 <style scoped>
+.click-area {
+  width:500px;
+  height:500px;
+  border:10px solid #000;
+  font-size:400px;
+  text-align:center;
+  vertical-align:middle;
+  line-height:500px;
+  margin:auto;
+}
 .noselect {
   -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Safari */
