@@ -11,7 +11,7 @@
     {{ lastCpsResult }} cps
   </div>
   <div
-    style="text-align:center; padding:10px"
+    style="text-align:center; padding:10px;"
   >{{ testDurationSecs }} second(s)
   </div>
   <input
@@ -96,7 +96,6 @@ export default {
     }
   },
   setup () {
-    console.log('setup')
     // disable zooming, because fast tapping on mobile triggers it
     const meta = [...document.getElementsByTagName('meta')].filter(x => x.name === 'viewport')[0]
     meta.content = 'width=device-width, user-scalable=no'
@@ -106,10 +105,10 @@ export default {
 
 <style scoped>
 .click-area {
-  width:500px;
+  width:95%;
   height:500px;
   border:10px solid #000;
-  font-size:400px;
+  font-size:1500%;
   text-align:center;
   vertical-align:middle;
   line-height:500px;
