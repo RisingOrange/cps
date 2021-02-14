@@ -28,6 +28,10 @@ function rgb (r, g, b) {
   return `rgb(${r},${g},${b})`
 }
 
+function round (value, decimals) {
+  return Number(Math.round(value + 'e' + decimals) + 'e-' + decimals)
+}
+
 export default {
   name: 'App',
   data: function () {
@@ -53,7 +57,7 @@ export default {
     evaluateTest () {
       this.isTestRunning = false
 
-      const clicksPerSecond = this.clickAmount / this.testDurationSecs
+      const clicksPerSecond = round(this.clickAmount / this.testDurationSecs, 2)
       this.lastCpsResult = clicksPerSecond
       this.clickAmount = 0
 
