@@ -75,8 +75,7 @@ export default {
       this.lastCpsResult = clicksPerSecond
       this.clickAmount = 0
 
-      // call function using timeout to let the display update first
-      setTimeout(() => this.showResultAlert(clicksPerSecond), 0)
+      this.showResultAlert(clicksPerSecond)
     },
     showResultAlert (clicksPerSecond) {
       disableContextMenu() // disables contextmenu
